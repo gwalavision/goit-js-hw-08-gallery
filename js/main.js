@@ -67,6 +67,8 @@ function onArrowTap(e) {
 }
 
 function onImageClick(e) {
+    imageInModal.setAttribute('src', '')
+
     const href = document.querySelector('.gallery__link');
 
        const imagePreview = e.target
