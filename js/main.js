@@ -19,29 +19,13 @@ createImageList(galleryItems)
 
 function createImageList(arr) {
 
-    arr.forEach((obj, index) => {
-        const { preview, original, description } = obj
+   const template = arr.map(
+  ({ preview, description, original },index) =>
+    `<li class="gallery__item"><a class="gallery__link" href="${original}"><img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}" data-index="${index}"/></a></li>`,
+);
 
-        const galleryItem = document.createElement('li');
-        galleryItem.classList.add('gallery__item');
+galleryRef.insertAdjacentHTML('afterbegin', template.join(''));
 
-        const galleryLink = document.createElement('a');
-        galleryLink.classList.add('gallery__link');
-        galleryLink.setAttribute('href', original);
-
-        const galleryImage = document.createElement('img');
-        galleryImage.classList.add('gallery__image');
-        galleryImage.setAttribute('src', preview);
-        galleryImage.setAttribute('data-source', original);
-        galleryImage.setAttribute('alt', description);
-        galleryImage.setAttribute('data-index', index);
-
-        galleryLink.appendChild(galleryImage)
-        galleryItem.appendChild(galleryLink)
-
-        galleryRef.appendChild(galleryItem)
-        }
-    )
 }
 
 function onArrowTap(e) {
@@ -51,6 +35,9 @@ function onArrowTap(e) {
         if (imageIndex + 1 > galleryItems.length - 1) {
             return
         }
+        imageInModal.setAttribute('src', '')
+        imageInModal.setAttribute('alt', '')
+        
         imageIndex +=1
         imageInModal.src = galleryItems[imageIndex].original;
         imageInModal.alt = galleryItems[imageIndex].description;
@@ -59,6 +46,9 @@ function onArrowTap(e) {
         if (imageIndex - 1 < 0) {
             return
         }
+        imageInModal.setAttribute('src', '')
+        imageInModal.setAttribute('alt', '')
+
         imageIndex -=1
         imageInModal.src = galleryItems[imageIndex].original;
         imageInModal.alt = galleryItems[imageIndex].description;
@@ -67,16 +57,13 @@ function onArrowTap(e) {
 }
 
 function onImageClick(e) {
-    imageInModal.setAttribute('src', '')
-
     const href = document.querySelector('.gallery__link');
 
        const imagePreview = e.target
     if (imagePreview.className !== 'gallery__image') {
         return
-    } else if (imagePreview.nodeName !== 'A') {
-        e.preventDefault()
-    }
+    } 
+    e.preventDefault()
 
     imageInModal.setAttribute('src', imagePreview.dataset.source)
     imageInModal.setAttribute('alt', imagePreview.alt)
